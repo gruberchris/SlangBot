@@ -1,14 +1,10 @@
-  # SlangBot
+ # SlangBot
+ 
+ SlangBot is a conversational assistance bot for Slack that is built on a sample application powered by Botkit.
   
-  SlangBot is a conversational assistance bot for Slack that is built on a sample application powered by Botkit.
-  
-  SlangBot is designed to run on NodeJS 6.9.4 (LTS) and has added a responder for finding Wikipedia articles.
- ______     ______     ______   __  __     __     ______
- /\  == \   /\  __ \   /\__  _\ /\ \/ /    /\ \   /\__  _\
- \ \  __<   \ \ \/\ \  \/_/\ \/ \ \  _"-.  \ \ \  \/_/\ \/
-  \ \_____\  \ \_____\    \ \_\  \ \_\ \_\  \ \_\    \ \_\
-   \/_____/   \/_____/     \/_/   \/_/\/_/   \/_/     \/_/
+ SlangBot is designed to run on NodeJS 6.9.4 (LTS) and has added a responder for finding Wikipedia articles.
 
+ # Botkit Notes
 
  This is a sample Slack bot built with Botkit.
 
