@@ -168,12 +168,41 @@ controller.hears(['wiki (.*)', 'what is (.*)', 'tell me about (.*)', 'what are (
 
   mediawiki.findMatchingArticle(articleSearchTerm, (result) => {
     if(result) {
-      bot.reply(message, result);
+      let responseText = '';
+      let articlesCount = result.suggestedArticles.length;
+
+      let response = {};
+      response.attachments = [];
+
+      if(result.resultType === 'single') {
+        response.text = 'This wiki article appears to be what you asked for :tada:';
+      } else {
+        response.text = 'I found ' + articlesCount + ' matching article';
+
+        if(articlesCount > 1) {
+          response.text += 's';
+        }
+
+        response.text += ' you may be interested in :see_no_evil:';
+      }
+
+      for(let counter = 0; counter < articlesCount; counter++) {
+        let article = result.suggestedArticles[counter];
+        response.attachments.push({
+          fallback: article.articleTitle,
+          title : article.articleTitle,
+          title_link: article.articleUri,
+          text: article.articleSnippet,
+          color: "#7CD197"
+        });
+      }
+
+      bot.reply(message, response);
     } else {
-      bot.reply(message, 'I could not find any information about `' + articleSearchTerm + '`.');
+      bot.reply(message, 'I could not find any information about `' + articleSearchTerm + '` :confounded:');
     }
   }, (error) => {
-    bot.reply(message, 'There was a problem while looking up information about `' + articleSearchTerm + '`.');
+    bot.reply(message, 'There was a problem while looking up information about `' + articleSearchTerm + '` :boom:');
   });
 });
 
