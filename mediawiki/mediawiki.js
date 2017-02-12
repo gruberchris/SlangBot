@@ -35,22 +35,14 @@ function processQueryResponse(response) {
   }
 }
 
-function findMatchingArticleTest (searchTerm, onSuccessCallback, onErrorCallback) {
-  getMatchingArticles(searchTerm).then((queryResult) => {
-    if(queryResult) {
-      onSuccessCallback(queryResult);
-    } else {
-      onSuccessCallback();
-    }
-  }).catch((error) => {
-    onErrorCallback(error);
-  });
+function findMatchingArticle (searchTerm) {
+  return getMatchingArticles(searchTerm);
 }
 
-module.exports.findMatchingArticle = findMatchingArticleTest;
+module.exports.findMatchingArticle = findMatchingArticle;
 
-findMatchingArticleTest('', (success) => {
-   console.log(success);
- }, (error) => {
-   console.log(error);
+findMatchingArticle('').then((queryResult) => {
+  console.log(queryResult);
+}).catch((error) => {
+  console.log(error);
 });

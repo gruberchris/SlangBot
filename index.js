@@ -171,7 +171,7 @@ controller.hears(['wiki (.*)', 'what is (.*)', 'tell me about (.*)', 'what are (
 
   let articleSearchTerm = message.match[1];
 
-  mediawiki.findMatchingArticle(articleSearchTerm, (result) => {
+  mediawiki.findMatchingArticle(articleSearchTerm).then((result) => {
     if(result) {
       let responseText = '';
       let articlesCount = result.suggestedArticles.length;
@@ -202,7 +202,7 @@ controller.hears(['wiki (.*)', 'what is (.*)', 'tell me about (.*)', 'what are (
     } else {
       bot.reply(message, 'I could not find any information about `' + articleSearchTerm + '` :confounded:');
     }
-  }, (error) => {
+  }).catch((error) => {
     bot.reply(message, 'There was a problem while looking up information about `' + articleSearchTerm + '` :boom:');
   });
 });
