@@ -2,7 +2,7 @@
 const config = require('./config.json');
 const Botkit = require('botkit');
 const os = require('os');
-const mediawiki = require('./mediawiki');
+const mediawiki = require('./mediawiki/mediawiki');
 
 process.env.token = process.env.token || config.slackApiToken;
 
@@ -170,31 +170,27 @@ controller.hears(['wiki (.*)', 'what is (.*)', 'tell me about (.*)', 'what are (
     if(result) {
       let responseText = '';
       let articlesCount = result.suggestedArticles.length;
-
       let response = {};
+
       response.attachments = [];
-
-      if(result.resultType === 'single') {
-        response.text = 'This wiki article appears to be what you asked for :tada:';
-      } else {
-        response.text = 'I found ' + articlesCount + ' matching article';
-
-        if(articlesCount > 1) {
-          response.text += 's';
-        }
-
-        response.text += ' you may be interested in :see_no_evil:';
-      }
 
       for(let counter = 0; counter < articlesCount; counter++) {
         let article = result.suggestedArticles[counter];
+
         response.attachments.push({
-          fallback: article.articleTitle,
-          title : article.articleTitle,
-          title_link: article.articleUri,
-          text: article.articleSnippet,
+          fallback: article.title,
+          title : article.title,
+          title_link: article.uri,
+          text: article.snippet,
           color: "#7CD197"
         });
+
+        if(articlesCount === 1 || article.title.toLowerCase() === articleSearchTerm.toLowerCase()) {
+          response.text = 'This article appears to be what you asked for :tada:';
+          break;
+        } else {
+          response.text = 'I found ' + articlesCount + ' articles about `' + articleSearchTerm + '` you may be interested in :confetti_ball:';
+        }
       }
 
       bot.reply(message, response);

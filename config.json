@@ -1,3 +1,4 @@
 {
-  "slackApiToken": ""
+  "slackApiToken": "",
+  "mediaWikiBaseUri": "http://en.wikipedia.org"
 }
