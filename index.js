@@ -2,7 +2,6 @@
 const config = require('./config.json');
 const Botkit = require('botkit');
 const os = require('os');
-const moment = require('moment');
 const mediawiki = require('./mediawiki/mediawiki');
 const wunderground = require('./wunderground/wunderground');
 
@@ -160,7 +159,39 @@ controller.hears(['uptime', 'identify yourself', 'who are you', 'what is your na
   ['direct_message', 'direct_mention', 'mention'], function (bot, message) {
 
     let hostname = os.hostname();
-    let uptime = formatUptime();
+    let formatUptime = (uptime) => {
+      let unit = 'second';
+
+      if(uptime > 60) {
+        uptime = uptime / 60;
+        unit = 'minute';
+      }
+
+      if(uptime > 60) {
+        uptime = uptime / 60;
+        unit = 'hour';
+      }
+
+      uptime = Math.round(uptime);
+
+      if(uptime > 0) {
+        if(uptime !== 1) {
+          unit = unit + 's';
+        }
+
+        return uptime + ' ' + unit;
+      } else {
+        if(unit === 'second') {
+          return 'a few moments';
+        } else if(unit === 'minute') {
+          return 'a few seconds';
+        } else if(unit === 'hour') {
+          return 'a few minutes';
+        }
+      }
+    };
+
+    let uptime = formatUptime(process.uptime());
 
     bot.reply(message,
       ':robot_face: I am a bot named <@' + bot.identity.name +
@@ -214,7 +245,7 @@ controller.hears(['(.*)weather for (.*), (.*)', '(.*)weather in (.*), (.*)'],
       };
 
       let getWindEmoji = (wind) => {
-        const windy = 10;
+        const windy = 15;
 
         if(wind > windy) {
           return ' :wind_blowing_face:';
@@ -301,7 +332,3 @@ controller.hears(['wiki (.*)', 'what is (.*)', 'tell me about (.*)', 'what are (
     bot.reply(message, 'There was a problem while looking up information about `' + articleSearchTerm + '` :boom:');
   });
 });
-
-function formatUptime(uptime) {
-  return moment.duration(uptime).humanize();
-}
