@@ -273,7 +273,7 @@ controller.hears(['(.*)weather for (.*), (.*)', '(.*)weather in (.*), (.*)'],
         messageText = messageText + ' Today there has been *' + precipTodayDescription + '* of precipitation.';
 
         if(precipLastHourInInches > 0) {
-          messageText = messageText + 'In the last hour, there has been *' + precipLastHourDescription
+          messageText = messageText + ' In the last hour, there has been *' + precipLastHourDescription
             + '* :umbrella_with_rain_drops: of precipitation.';
         }
       }
