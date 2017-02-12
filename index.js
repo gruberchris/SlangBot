@@ -2,6 +2,7 @@
 const config = require('./config.json');
 const Botkit = require('botkit');
 const os = require('os');
+const moment = require('moment');
 const mediawiki = require('./mediawiki/mediawiki');
 
 process.env.token = process.env.token || config.slackApiToken;
@@ -20,7 +21,7 @@ let bot = controller.spawn({
   token: process.env.token
 }).startRTM();
 
-controller.hears(['hello', 'hi'], 'direct_message,direct_mention,mention', function (bot, message) {
+controller.hears(['hello', 'hi'], ['direct_message', 'direct_mention', 'mention'], function (bot, message) {
   bot.api.reactions.add({
     timestamp: message.ts,
     channel: message.channel,
@@ -40,7 +41,9 @@ controller.hears(['hello', 'hi'], 'direct_message,direct_mention,mention', funct
   });
 });
 
-controller.hears(['call me (.*)', 'my name is (.*)'], 'direct_message,direct_mention,mention', function (bot, message) {
+controller.hears(['call me (.*)', 'my name is (.*)'],
+  ['direct_message', 'direct_mention', 'mention'], function (bot, message) {
+
   let name = message.match[1];
 
   controller.storage.users.get(message.user, function (err, user) {
@@ -58,7 +61,9 @@ controller.hears(['call me (.*)', 'my name is (.*)'], 'direct_message,direct_men
   });
 });
 
-controller.hears(['what is my name', 'who am i'], 'direct_message,direct_mention,mention', function (bot, message) {
+controller.hears(['what is my name', 'who am i'],
+  ['direct_message', 'direct_mention', 'mention'], function (bot, message) {
+
   controller.storage.users.get(message.user, function (err, user) {
     if (user && user.name) {
       bot.reply(message, 'Your name is ' + user.name);
@@ -125,7 +130,7 @@ controller.hears(['what is my name', 'who am i'], 'direct_message,direct_mention
   });
 });
 
-controller.hears(['shutdown'], 'direct_message,direct_mention,mention', function (bot, message) {
+controller.hears(['shutdown'], ['direct_message', 'direct_mention', 'mention'], function (bot, message) {
   bot.startConversation(message, function (err, convo) {
     convo.ask('Are you sure you want me to shutdown?', [
       {
@@ -151,18 +156,18 @@ controller.hears(['shutdown'], 'direct_message,direct_mention,mention', function
 });
 
 controller.hears(['uptime', 'identify yourself', 'who are you', 'what is your name'],
-  'direct_message,direct_mention,mention', function (bot, message) {
+  ['direct_message', 'direct_mention', 'mention'], function (bot, message) {
 
     let hostname = os.hostname();
-    let uptime = formatUptime(process.uptime());
+    let uptime = formatUptime();
 
     bot.reply(message,
       ':robot_face: I am a bot named <@' + bot.identity.name +
       '>. I have been running for ' + uptime + ' on ' + hostname + '.');
   });
 
-controller.hears(['wiki (.*)', 'what is (.*)', 'tell me about (.*)', 'what are (.*)'],
-  ['direct_message','direct_mention','mention'], (bot, message) => {
+controller.hears(['wiki (.*)', 'what is (.*)', 'tell me about (.*)', 'what are (.*)', 'who is (.*)', 'who are (.*)'],
+  ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
 
   let articleSearchTerm = message.match[1];
 
@@ -203,23 +208,5 @@ controller.hears(['wiki (.*)', 'what is (.*)', 'tell me about (.*)', 'what are (
 });
 
 function formatUptime(uptime) {
-  let unit = 'second';
-
-  if (uptime > 60) {
-    uptime = uptime / 60;
-    unit = 'minute';
-  }
-
-  if (uptime > 60) {
-    uptime = uptime / 60;
-    unit = 'hour';
-  }
-
-  if (uptime != 1) {
-    unit = unit + 's';
-  }
-
-  uptime = uptime + ' ' + unit;
-
-  return uptime;
+  return moment.duration(uptime).humanize();
 }

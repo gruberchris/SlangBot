@@ -7,7 +7,7 @@ class ArticleSearchResult {
   }
 
   get uri() {
-    return encodeURI(this.baseUrii + '/wiki/' + this.title);
+    return encodeURI(this.baseUri + '/wiki/' + this.title);
   }
 
   get snippet() {
