@@ -35,14 +35,56 @@ function processQueryResponse(response) {
   }
 }
 
-function findMatchingArticle (searchTerm) {
+function findMatchingArticle(searchTerm) {
   return getMatchingArticles(searchTerm);
 }
 
-module.exports.findMatchingArticle = findMatchingArticle;
+function onMediawikiResponse(bot, message) {
 
+  let articleSearchTerm = message.match[1];
+
+  findMatchingArticle(articleSearchTerm).then((result) => {
+    if(result) {
+      let articlesCount = result.suggestedArticles.length;
+      let response = {};
+
+      response.attachments = [];
+
+      for(let counter = 0; counter < articlesCount; counter++) {
+        let article = result.suggestedArticles[counter];
+
+        response.attachments.push({
+          fallback: article.title,
+          title : article.title,
+          title_link: article.uri,
+          text: article.snippet,
+          color: "#7CD197"
+        });
+
+        if(articlesCount === 1 || article.title.toLowerCase() === articleSearchTerm.toLowerCase()) {
+          response.text = 'This article appears to be what you asked for :tada:';
+          break;
+        } else {
+          response.text = 'I found ' + articlesCount + ' articles about `' + articleSearchTerm
+            + '` you may be interested in :confetti_ball:';
+        }
+      }
+
+      bot.reply(message, response);
+    } else {
+      bot.reply(message, 'I could not find any information about `' + articleSearchTerm + '` :confounded:');
+    }
+  }).catch((error) => {
+    bot.reply(message, 'There was a problem while looking up information about `' + articleSearchTerm + '` :boom:');
+  });
+}
+
+module.exports.onMediawikiResponse = onMediawikiResponse;
+
+/*
 findMatchingArticle('').then((queryResult) => {
   console.log(queryResult);
 }).catch((error) => {
   console.log(error);
 });
+*/
