@@ -14,7 +14,7 @@ function getCurrentConditions(state, city) {
 
 module.exports.getCurrentConditions = getCurrentConditions;
 
-getCurrentConditions('mn', 'minneapolis').then((result) => {
+getCurrentConditions().then((result) => {
   console.log(result);
 }).catch((error) => {
   console.log(error);
