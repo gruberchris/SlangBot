@@ -30,7 +30,7 @@ function processQueryResponse(response) {
         suggestedArticles.push(new ArticleSearchResult(articleSnippet, articleTitle, mediaWikiHostBaseUri));
       });
 
-      return { suggestedArticles : suggestedArticles }
+      return { suggestedArticles : suggestedArticles };
     }
   }
 }

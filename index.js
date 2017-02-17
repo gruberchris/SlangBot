@@ -2,8 +2,8 @@
 const config = require('./config.json');
 const Botkit = require('botkit');
 const os = require('os');
-const mediawiki = require('./mediawiki/mediawiki');
-const wunderground = require('./wunderground/wunderground');
+const mediawiki = require('./responders/mediawiki/mediawiki');
+const wunderground = require('./responders/wunderground/wunderground');
 
 process.env.token = process.env.token || config.slackApiToken;
 

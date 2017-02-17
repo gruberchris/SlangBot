@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "lint": "eslint index.js mediawiki.js",
-    "test": "node ./mediawiki/mediawiki.js"
+    "lint": "eslint index.js ./responders/**/*.js",
+    "test": "node ./responders/mediawiki/mediawiki.js"
   },
   "keywords": [
     "slack",
