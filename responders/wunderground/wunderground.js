@@ -1,6 +1,6 @@
 /* globals require module */
 const rp = require('request-promise');
-const wundergroundApiKey = require('.././config.json').wundergroundApiKey;
+const wundergroundApiKey = require('../.././config.json').wundergroundApiKey;
 const wundergroundBaseUri = 'http://api.wunderground.com/api/' + wundergroundApiKey + '/conditions/q';
 
 function getCurrentConditions(state, city) {
