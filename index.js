@@ -1,14 +1,15 @@
 /* global require process console setTimeout */
+require('dotenv').config();
 const config = require('./config.json');
 const Botkit = require('botkit');
 const os = require('os');
 const mediawiki = require('./responders/mediawiki/mediawiki');
 const wunderground = require('./responders/wunderground/wunderground');
 
-process.env.token = process.env.token || config.slackApiToken;
+const slackApiToken = process.env.SLANGBOT_SLACKAPITOKEN || config.slackApiToken;
 
-if (!process.env.token) {
-  console.log('Error: Specify token in environment');
+if (!slackApiToken) {
+  console.log('Error: Specify SLANGBOT_SLACKAPITOKEN in environment');
   process.exit(1);
 }
 
@@ -18,7 +19,7 @@ let controller = Botkit.slackbot({
 });
 
 let bot = controller.spawn({
-  token: process.env.token,
+  token: slackApiToken,
   retry: true
 }).startRTM();
 

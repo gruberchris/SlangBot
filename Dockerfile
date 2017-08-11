@@ -1,4 +1,4 @@
-FROM node:6.9.4-wheezy
+FROM node:8.3
 # Create app directory
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app

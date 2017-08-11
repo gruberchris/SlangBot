@@ -1,6 +1,6 @@
 /* globals require module */
 const rp = require('request-promise');
-const wundergroundApiKey = require('../.././config.json').wundergroundApiKey;
+const wundergroundApiKey = process.env.SLANGBOT_WUNDERGROUNDAPIKEY || require('../.././config.json').wundergroundApiKey;
 const wundergroundBaseUri = 'http://api.wunderground.com/api/' + wundergroundApiKey + '/conditions/q';
 
 function getCurrentConditions(state, city) {
@@ -13,7 +13,6 @@ function getCurrentConditions(state, city) {
 }
 
 function onWeatherResponse (bot, message) {
-
   let city = message.match[2];
   let state = message.match[3].replace('?', '');
   let response = { text: "", attachments: [] };

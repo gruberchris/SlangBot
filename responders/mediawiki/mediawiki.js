@@ -1,7 +1,7 @@
-/* globals require module */
+/* globals require module process */
 const rp = require('request-promise');
 const ArticleSearchResult = require('./articleSearchResult').ArticleSearchResult;
-const mediaWikiHostBaseUri = require('../.././config.json').mediaWikiBaseUri;
+const mediaWikiHostBaseUri = process.env.SLANGBOT_MEDIAWIKIBASEURI || require('../.././config.json').mediaWikiBaseUri;
 
 function getMatchingArticles(searchTerm) {
   const urlBase = mediaWikiHostBaseUri + '/w/api.php?action=query&list=search&format=json&prop=extracts&exintro=&explaintext=';
